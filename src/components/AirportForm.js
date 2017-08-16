@@ -68,8 +68,10 @@ class AirportForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const { starting, destination } = this.state;
-        let airports = { starting, destination };
-        this.props.onSubmit({ airports });
+        if (starting && destination) {
+            let airports = { starting, destination };
+            this.props.onSubmit({ airports });
+        }
     }
 
     render() {
@@ -97,7 +99,12 @@ class AirportForm extends Component {
                     dataSourceConfig={{text: 'text', value: 'value'}}
                     filter={AutoComplete.fuzzyFilter}
                 /><br />
-                <RaisedButton type="submit" label="Submit" primary />
+                <RaisedButton 
+                    type="submit" 
+                    label="Submit"
+                    disabled={!this.state.starting && !this.state.destination}
+                    primary
+                />
             </form>
         )
     }
