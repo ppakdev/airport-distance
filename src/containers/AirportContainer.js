@@ -6,7 +6,7 @@ class AirportContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            distance: 0,
+            distance: null,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -34,16 +34,25 @@ class AirportContainer extends Component {
         } else if (unit === "N") { 
             dist = dist * 0.8684 
         }
-        return dist
+        return dist.toFixed(2);
     }
 
     render() {
+        let distanceText = `Distance between airports: ${this.state.distance} nautical miles.`;
         return (
             <div>
                 <p className="App-intro">
                     To get started select starting and destination aiports and submit.
                 </p>
                 <AirportForm onSubmit={this.handleSubmit} />
+                {this.state.distance && 
+                    <div>
+                        <p>
+                            {distanceText}
+                        </p>
+
+                    </div>
+                }
             </div>
         )
     }
