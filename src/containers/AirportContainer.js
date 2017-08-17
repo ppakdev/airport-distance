@@ -18,7 +18,11 @@ class AirportContainer extends Component {
         const { starting, destination } = input.airports;
         let distance = this.calculateDistance(starting.lat, starting.long, destination.lat, destination.long);
         let midpoint = this.calculateMidpoint(starting.lat, starting.long, destination.lat, destination.long);
-        this.setState({distance, midpoint});
+        this.setState({
+            distance, 
+            midpoint,
+            airports: input.airports
+        });
     }
 
     // calculation from GeoDataSource
@@ -76,7 +80,7 @@ class AirportContainer extends Component {
                         <p>
                             {distanceText}
                         </p>
-                    <MapContainer midpoint={this.state.midpoint} />
+                    <MapContainer midpoint={this.state.midpoint} airports={this.state.airports} distance={this.state.distance} />
                     </div>
                 }
             </div>
