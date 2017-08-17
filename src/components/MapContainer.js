@@ -3,15 +3,20 @@ import {InfoWindow, Map, Marker, Polygon, GoogleApiWrapper} from 'google-maps-re
  
 export class MapContainer extends Component {
     render() {
-        if (!this.props.google) {
+        const { google, airports: { starting, destination }} = this.props;
+
+        // hacky way to prevent container from breaking when google's not loaded yet
+        if (!google) {
             return null;
         }
+
+        // basic map style
         const style = {
             width: '100%',
             height: '50%',
         }
         
-        const { google, airports: { starting, destination }} = this.props;
+        // set up path to be drawn the way google wants it
         let mapCoords = [
             {
                 lat: starting.lat,
@@ -23,14 +28,16 @@ export class MapContainer extends Component {
             },
         ];
 
-        let flightPath = new google.maps.Polyline({
-          path: mapCoords,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2
+        // draw path 
+        // this google map component set doesn't have all components available, so.. just use google map api
+        new google.maps.Polyline({
+            path: mapCoords,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
         });
-        console.log(flightPath);
+
         return (
             <Map 
                 google={google}
@@ -68,6 +75,6 @@ export class MapContainer extends Component {
 }
  
 export default GoogleApiWrapper({
-  apiKey: ('AIzaSyBuAXrBWZOBb-hanSz_06bWenyW_OTpqBg'),
+  apiKey: ('AIzaSyBuAXrBWZOBb-hanSz_06bWenyW_OTpqBg'), // normally hide this in env variables
   version: '3.28'
 })(MapContainer)

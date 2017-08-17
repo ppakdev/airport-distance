@@ -44,6 +44,8 @@ class AirportContainer extends Component {
         return dist.toFixed(2);
     }
 
+    // calculate midpoint lat/long to set map to
+    // math taken from http://www.andrewnoske.com/wiki/JavaScript_-_Geometry
     calculateMidpoint(latitude1, longitude1, latitude2, longitude2) {
         let DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
         

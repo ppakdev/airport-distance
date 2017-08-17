@@ -18,6 +18,7 @@ class AirportForm extends Component {
     }
 
     componentDidMount() {
+        // the csv I got has some airports with no codes
         let airports = AIRPORTS.filter((airport) => {
             return airport.code !== "\\N";
         })
@@ -25,6 +26,7 @@ class AirportForm extends Component {
     }
     
     handleChange(searchText) {
+        // only filter if 2 or more characters entered
         if (searchText.length >= 2) {
             let temp = this.filterAirports(searchText);
             this.setState({ airportList: temp });
@@ -32,6 +34,7 @@ class AirportForm extends Component {
     }
 
     handleRequest(value, index, name) {
+        // store selected values to state
         if (name === "starting") {
             let starting = AIRPORTS.filter((airport) => {
                 return airport.code === value.value;
@@ -46,6 +49,7 @@ class AirportForm extends Component {
     }
 
     filterAirports(text) {
+        // filter by code or airport name
         return this.state.airports.filter((airport) => {
             return (airport.name.toLowerCase().includes(text) || airport.code.toLowerCase() === text.toLowerCase());
         }).map((airport) => {
@@ -57,6 +61,7 @@ class AirportForm extends Component {
     }
 
     mapAirports() {
+        // format the list we have to a more manageable object
         return this.state.airports.map((airport) => {
             return {
                 text: `${airport.code} - ${airport.name}`,
@@ -66,6 +71,7 @@ class AirportForm extends Component {
     }
 
     handleSubmit(event) {
+        // submitting form sends the info back up to the parent container
         event.preventDefault();
         const { starting, destination } = this.state;
         if (starting && destination) {
