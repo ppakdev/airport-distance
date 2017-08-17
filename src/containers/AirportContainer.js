@@ -12,6 +12,7 @@ class AirportContainer extends Component {
             midpoint: null,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.resetForm = this.resetForm.bind(this);
     }
 
     handleSubmit(input) {       
@@ -68,6 +69,13 @@ class AirportContainer extends Component {
             lng: lng / DEG_TO_RAD
         }
     };
+
+    resetForm() {
+        return this.setState({
+            distance: null,
+            midpoint: null,
+        })
+    }
     
     render() {
         let distanceText = `Distance between airports: ${this.state.distance} nautical miles.`;
@@ -76,7 +84,7 @@ class AirportContainer extends Component {
                 <p className="App-intro">
                     To get started select starting and destination aiports and submit.
                 </p>
-                <AirportForm onSubmit={this.handleSubmit} />
+                <AirportForm onSubmit={this.handleSubmit} onResetForm={this.resetForm} />
                 {this.state.distance && 
                     <div>
                         <p>

@@ -11,10 +11,12 @@ class AirportForm extends Component {
             destination: '',
             airportList: [],
             airports: [],
+            formSubmitted: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.resetForm = this.resetForm.bind(this);
     }
 
     componentDidMount() {
@@ -77,7 +79,23 @@ class AirportForm extends Component {
         if (starting && destination) {
             let airports = { starting, destination };
             this.props.onSubmit({ airports });
+            this.setState({ formSubmitted: true });
         }
+    }
+
+    resetForm() {
+        this.props.onResetForm();
+
+        // this seems wrong and would be easier with redux-form
+        // but form values weren't resetting
+        this._startingText.setState({searchText: ''});
+        this._destinationText.setState({searchText: ''});
+        this.setState({
+            starting: '',
+            destination: '',
+            formSubmitted: false,
+        });
+
     }
 
     render() {
@@ -87,30 +105,39 @@ class AirportForm extends Component {
                     hintText="Where are you departing from?"
                     floatingLabelText="Starting Airport"
                     name="starting"
-                    value={this.state.starting || ''}
+                    ref={(node) => this._startingText = node}
+                    value={this.state.starting}
                     onUpdateInput={this.handleChange}
                     onNewRequest={(value, index) => this.handleRequest(value, index, "starting")}
                     dataSource={this.state.airportList}
                     dataSourceConfig={{text: 'text', value: 'value'}}
                     filter={AutoComplete.fuzzyFilter}
+                    disabled={this.state.formSubmitted}
                 /><br />
                 <AutoComplete
                     hintText="Where are you trying to get to?"
                     floatingLabelText="Destination Airport"
                     name="destination"
-                    value={this.state.starting || ''}
+                    ref={(node) => this._destinationText = node}
+                    value={this.state.starting}
                     onUpdateInput={this.handleChange}
                     onNewRequest={(value, index) => this.handleRequest(value, index, "destination")}
                     dataSource={this.state.airportList}
                     dataSourceConfig={{text: 'text', value: 'value'}}
                     filter={AutoComplete.fuzzyFilter}
+                    disabled={this.state.formSubmitted}
                 /><br />
                 <RaisedButton 
                     type="submit" 
                     label="Submit"
-                    disabled={!this.state.starting && !this.state.destination}
+                    disabled={this.state.formSubmitted || (!this.state.starting || !this.state.destination)}
                     primary
                 />
+                {this.state.formSubmitted && <RaisedButton
+                    label="Reset Form"
+                    onClick={this.resetForm}
+                    secondary
+                />}
             </form>
         )
     }
