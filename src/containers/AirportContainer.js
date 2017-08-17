@@ -40,37 +40,6 @@ class AirportContainer extends Component {
         return dist.toFixed(2);
     }
 
-    // //-- Define middle point function
-    // calculateMidpoint(lat1, lng1, lat2, lng2) {
-    //     if (typeof (Number.prototype.toDeg) === "undefined") {
-    //         Number.prototype.toDeg = function () {
-    //             return this * (180 / Math.PI);
-    //         }
-    //     }
-    //     //-- Longitude difference
-    //     // var dLng = (lng2 - lng1).toRad();
-    //     let radlat1 = Math.PI * lat1/180;
-    //     let radlat2 = Math.PI * lat2/180;
-    //     let theta = lng1-lng2;
-    //     let radtheta = Math.PI * theta/180;
-    //     //-- Convert to radians
-    //     // lat1 = lat1.toRad();
-    //     // lat2 = lat2.toRad();
-    //     // lng1 = lng1.toRad();
-    //     let radlng1 = Math.PI * lng1/180;
-
-    //     let bX = Math.cos(radlat2) * Math.cos(radtheta);
-    //     let bY = Math.cos(radlat2) * Math.sin(radtheta);
-    //     let lat3 = Math.atan2(Math.sin(radlat1) + Math.sin(radlat2), Math.sqrt((Math.cos(radlat1) + bX) * (Math.cos(radlat1) + bX) + bY * bY));
-    //     let lng3 = radlng1 + Math.atan2(bY, Math.cos(radlat1) + bX);
-
-    //     //-- Return result
-    //     return {
-    //         lat: lat3.toDeg(),
-    //         lng: lng3.toDeg()
-    //     }
-    // }
-
     calculateMidpoint(latitude1, longitude1, latitude2, longitude2) {
         let DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
         
@@ -93,7 +62,7 @@ class AirportContainer extends Component {
             lng: lng / DEG_TO_RAD
         }
     };
-
+    
     render() {
         let distanceText = `Distance between airports: ${this.state.distance} nautical miles.`;
         return (
