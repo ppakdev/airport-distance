@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 
 import AirportForm from '../components/AirportForm';
+import MapContainer from '../components/MapContainer';
+
 
 class AirportContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             distance: null,
+            midpoint: null,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -14,8 +17,8 @@ class AirportContainer extends Component {
     handleSubmit(input) {       
         const { starting, destination } = input.airports;
         let distance = this.calculateDistance(starting.lat, starting.long, destination.lat, destination.long);
-        this.setState({distance});
-        console.log(distance);
+        let midpoint = this.calculateMidpoint(starting.lat, starting.long, destination.lat, destination.long);
+        this.setState({distance, midpoint});
     }
 
     // calculation from GeoDataSource
@@ -37,6 +40,60 @@ class AirportContainer extends Component {
         return dist.toFixed(2);
     }
 
+    // //-- Define middle point function
+    // calculateMidpoint(lat1, lng1, lat2, lng2) {
+    //     if (typeof (Number.prototype.toDeg) === "undefined") {
+    //         Number.prototype.toDeg = function () {
+    //             return this * (180 / Math.PI);
+    //         }
+    //     }
+    //     //-- Longitude difference
+    //     // var dLng = (lng2 - lng1).toRad();
+    //     let radlat1 = Math.PI * lat1/180;
+    //     let radlat2 = Math.PI * lat2/180;
+    //     let theta = lng1-lng2;
+    //     let radtheta = Math.PI * theta/180;
+    //     //-- Convert to radians
+    //     // lat1 = lat1.toRad();
+    //     // lat2 = lat2.toRad();
+    //     // lng1 = lng1.toRad();
+    //     let radlng1 = Math.PI * lng1/180;
+
+    //     let bX = Math.cos(radlat2) * Math.cos(radtheta);
+    //     let bY = Math.cos(radlat2) * Math.sin(radtheta);
+    //     let lat3 = Math.atan2(Math.sin(radlat1) + Math.sin(radlat2), Math.sqrt((Math.cos(radlat1) + bX) * (Math.cos(radlat1) + bX) + bY * bY));
+    //     let lng3 = radlng1 + Math.atan2(bY, Math.cos(radlat1) + bX);
+
+    //     //-- Return result
+    //     return {
+    //         lat: lat3.toDeg(),
+    //         lng: lng3.toDeg()
+    //     }
+    // }
+
+    calculateMidpoint(latitude1, longitude1, latitude2, longitude2) {
+        let DEG_TO_RAD = Math.PI / 180;     // To convert degrees to radians.
+        
+        // Convert latitude and longitudes to radians:
+        let lat1 = latitude1 * DEG_TO_RAD;
+        let lat2 = latitude2 * DEG_TO_RAD;
+        let lng1 = longitude1 * DEG_TO_RAD;
+        let dLng = (longitude2 - longitude1) * DEG_TO_RAD;  // Diff in longtitude.
+        
+        // Calculate mid-point:
+        let bx = Math.cos(lat2) * Math.cos(dLng);
+        let by = Math.cos(lat2) * Math.sin(dLng);
+        let lat = Math.atan2(
+            Math.sin(lat1) + Math.sin(lat2),
+            Math.sqrt((Math.cos(lat1) + bx) * (Math.cos(lat1) + bx) + by * by));
+        let lng = lng1 + Math.atan2(by, Math.cos(lat1) + bx);
+
+        return {
+            lat: lat / DEG_TO_RAD,
+            lng: lng / DEG_TO_RAD
+        }
+    };
+
     render() {
         let distanceText = `Distance between airports: ${this.state.distance} nautical miles.`;
         return (
@@ -50,7 +107,7 @@ class AirportContainer extends Component {
                         <p>
                             {distanceText}
                         </p>
-
+                    <MapContainer midpoint={this.state.midpoint} />
                     </div>
                 }
             </div>
