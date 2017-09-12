@@ -22,11 +22,11 @@ class AirportForm extends Component {
     componentDidMount() {
         // the csv I got has some airports with no codes
         let airports = AIRPORTS.filter((airport) => {
-            return airport.code !== "\\N";
+            return airport.code !== "\\N" && airport.country === 'United States';
         })
         this.setState({ airportList: this.mapAirports(), airports });
     }
-    
+
     handleChange(searchText) {
         // only filter if 2 or more characters entered
         if (searchText.length >= 2) {
@@ -113,6 +113,8 @@ class AirportForm extends Component {
                     dataSourceConfig={{text: 'text', value: 'value'}}
                     filter={AutoComplete.fuzzyFilter}
                     disabled={this.state.formSubmitted}
+                    style={{'width': '50%'}}
+                    fullWidth
                 /><br />
                 <AutoComplete
                     hintText="Where are you trying to get to?"
@@ -126,9 +128,11 @@ class AirportForm extends Component {
                     dataSourceConfig={{text: 'text', value: 'value'}}
                     filter={AutoComplete.fuzzyFilter}
                     disabled={this.state.formSubmitted}
+                    style={{'width': '50%'}}
+                    fullWidth
                 /><br />
-                <RaisedButton 
-                    type="submit" 
+                <RaisedButton
+                    type="submit"
                     label="Submit"
                     disabled={this.state.formSubmitted || (!this.state.starting || !this.state.destination)}
                     primary
